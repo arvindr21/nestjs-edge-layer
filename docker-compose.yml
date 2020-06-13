@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  dps-edge:
+    container_name: dps-edge
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:9229
+    command: npm run start:dev
+    # command: npm run start:debug # to debug
+    env_file:
+      - .env
+    networks:
+      - webnet
+    depends_on:
+      - redis
+  redis:
+    container_name: redis
+    image: redis:5
+    networks:
+      - webnet
+networks:
+  webnet:
